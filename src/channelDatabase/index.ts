@@ -22,8 +22,7 @@ export class ChannelDatabase {
     await this.setup();
   }
 
-  private async setup(): Promise<void> {
-    console.log(this.filename);
+  private async setup(): Promise<void> { 
     await this.db.exec(`
       create table if not exists channels (
         guildId TEXT PRIMARY KEY,

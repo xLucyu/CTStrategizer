@@ -36,7 +36,7 @@ export class BotClient {
     this.client.login(config.TOKEN);
     this.client.once("ready", async () => {
       console.log("Bot is online");
-      await syncCommands({ global: true })
+     // await syncCommands({ global: true })
     })
   }
 }
