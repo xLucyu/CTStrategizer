@@ -22,25 +22,26 @@ export class ChannelDatabase {
     await this.setup();
   }
 
-  private async setup() {
+  private async setup(): Promise<void> {
     console.log(this.filename);
     await this.db.exec(`
       create table if not exists channels (
         guildId TEXT PRIMARY KEY,
-        channelId TEXT
+        channelId TEXT,
+        CTID TEXT
       )
     `);
   }
 
-  public async addChannel(guildID: string, channelID: string) {
+  public async addChannel(guildID: string, channelID: string, latestEventID: string): Promise<void> {
     await this.db.run(
-      "insert or replace into channels (guildId, channelId) values (?, ?)", guildID, channelID
+      "insert or replace into channels (guildID, channelID, CTID) values (?, ?, ?)", guildID, channelID, latestEventID
     );
   }
 
-  public async getChannel(guildID: number) {
+  public async getChannel(guildID: number): Promise<any> {
     return await this.db.get(
-      "select * from channels where guildId = ?", guildId
+      "select * from channels where guildId = ?", guildID
     )
   }
 }

@@ -23,7 +23,7 @@ export class BotClient {
 
   public executeCommand() {
       this.client.on("interactionCreate", async (interaction) => {
-        if (!interaction.isChatInputCommand()) return; 
+        if (!interaction.isChatInputCommand() || !interaction.isCommand()) return; 
         const { commandName } = interaction;
 
         if (commands[commandName as keyof typeof commands]) { 
@@ -36,6 +36,7 @@ export class BotClient {
     this.client.login(config.TOKEN);
     this.client.once("ready", async () => {
       console.log("Bot is online");
+      await syncCommands({ global: true })
     })
   }
 }

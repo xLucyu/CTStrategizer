@@ -5,10 +5,13 @@ import {
 } 
 from "discord.js";
 import { ChannelDatabase } from "../channelDatabase";
+import { getData } from "../api/request";
+
+const CTURL = "https://data.ninjakiwi.com/btd6/ct"
 
 export const data = new SlashCommandBuilder()
   .setName("set_channel")
-  .setDescription("set the channel for the bot to post. MUST BE A FORUM!!")
+  .setDescription("set the channel for the bot to post. You can only have 1 per server.")
   .addChannelOption(option => option  
       .setName("channel")
       .setDescription("forum channel")
@@ -27,16 +30,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       });
     }
 
+    const ctApiData = await getData(CTURL);
+    const latestEventID = ctApiData?.body[0]?.id ?? ""; 
+
     const db = new ChannelDatabase();
     await db.open();
-    await db.addChannel(guildID, channelID);
+    await db.addChannel(guildID, channelID, latestEventID);
 
     return interaction.reply({
       content: `Strategy channel set to <#${channelID}>`
     });
-  } catch {
+  } catch(error) {
     return interaction.reply({
-      content: "something went wrong. Please try again."
+      content: `something went wrong. Please try again.\nError: ${error}`
     })
   }
 }
