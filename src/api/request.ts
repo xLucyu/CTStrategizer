@@ -1,4 +1,4 @@
-export async function getData(url: string): Promise<any> {
+export async function getData<T>(url: string): Promise<T> {
   const response = await fetch(url);
   if (!response.ok) throw new Error;
 
