@@ -1,7 +1,5 @@
-import * as setChannel from "./setChannel";
-import * as admin from "./Admin";
+import * as set_channel from "./setChannel";
 
 export const commands = {
-  setChannel,
-  admin 
+  set_channel
 };

@@ -11,8 +11,7 @@ export const data = new SlashCommandBuilder()
       .addChannelTypes(ChannelType.GuildForum)
   )
 
-export async function execute(interaction: CommandInteraction) {
-  console.log("hello");
+export async function execute(interaction: ChatInputCommandInteraction) {
   const channelID = interaction.options.getChannel("channel", true).id;
   const guildID = interaction.guildId;
   
@@ -23,9 +22,10 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   const db = new ChannelDatabase();
+  await db.open();
   await db.addChannel(guildID, channelID);
 
-  await interaction.reply({
-    content: `bot channel set to <${channelID}>`
+  return interaction.reply({
+    content: `channel set to <#${channelID}>`
   });
 }

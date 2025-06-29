@@ -21,15 +21,14 @@ export class BotClient {
     });
   }
 
-  private executeCommand() {
+  public executeCommand() {
       this.client.on("interactionCreate", async (interaction) => {
-        if (!interaction.isChatInputCommand()) return;
-
+        if (!interaction.isChatInputCommand()) return; 
         const { commandName } = interaction;
-        const command = commands[commandName as keyof typeof commands];
-        if (command) {
-          await command.execute(interaction);
-        }
+
+        if (commands[commandName as keyof typeof commands]) { 
+          commands[commandName as keyof typeof commands].execute(interaction);
+      }
       });
   }
 
