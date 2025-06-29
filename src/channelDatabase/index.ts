@@ -10,9 +10,9 @@ export class ChannelDatabase {
   private filename: string = path.resolve(__dirname, "channels.db"); 
 
   public async open(): Promise<void> {
-    const dir = path.dirname(this.filename);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    const directory = path.dirname(this.filename);
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory, { recursive: true });
     }
 
     this.db = await open({
@@ -32,13 +32,13 @@ export class ChannelDatabase {
     `);
   }
 
-  public async addChannel(guildId: string, channelId: string) {
+  public async addChannel(guildID: string, channelID: string) {
     await this.db.run(
-      "insert or replace into channels (guildId, channelId) values (?, ?)", guildId, channelId
+      "insert or replace into channels (guildId, channelId) values (?, ?)", guildID, channelID
     );
   }
 
-  public async getChannel(guildId: number) {
+  public async getChannel(guildID: number) {
     return await this.db.get(
       "select * from channels where guildId = ?", guildId
     )

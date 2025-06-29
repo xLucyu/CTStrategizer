@@ -1,0 +1,2 @@
+.env
+./src/channelDatabase/channels.db

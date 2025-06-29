@@ -1,4 +1,9 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, ChannelType, CommandInteraction } from "discord.js";
+import { 
+  ChatInputCommandInteraction,
+  SlashCommandBuilder, 
+  ChannelType 
+} 
+from "discord.js";
 import { ChannelDatabase } from "../channelDatabase";
 
 export const data = new SlashCommandBuilder()
@@ -12,20 +17,26 @@ export const data = new SlashCommandBuilder()
   )
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-  const channelID = interaction.options.getChannel("channel", true).id;
-  const guildID = interaction.guildId;
+  try {
+    const channelID = interaction.options.getChannel("channel", true).id;
+    const guildID = interaction.guildId;
   
-  if (!guildID) {
+    if (!guildID) {
+      return interaction.reply({
+        content: "Unable to use this in dms"
+      });
+    }
+
+    const db = new ChannelDatabase();
+    await db.open();
+    await db.addChannel(guildID, channelID);
+
     return interaction.reply({
-      content: "Unable to use this in dms"
+      content: `Strategy channel set to <#${channelID}>`
     });
+  } catch {
+    return interaction.reply({
+      content: "something went wrong. Please try again."
+    })
   }
-
-  const db = new ChannelDatabase();
-  await db.open();
-  await db.addChannel(guildID, channelID);
-
-  return interaction.reply({
-    content: `channel set to <#${channelID}>`
-  });
 }
